@@ -57,18 +57,48 @@ namespace Tetris
             }
         }
 
-        private Key MoveLeftKey { get; set; } = Key.Left;
-        private Key MoveRightKey { get; set; } = Key.Right;
-        private Key MoveDownKey { get; set; } = Key.Down;
-        private Key RotateCWKey { get; set; } = Key.Up;
-        private Key RotateCCWKey { get; set; } = Key.Z;
-        private Key DropBlockKey { get; set; } = Key.Space;
+        private Key MoveLeftKey;
+        private Key MoveRightKey;
+        private Key MoveDownKey;
+        private Key RotateCWKey;
+        private Key RotateCCWKey;
+        private Key DropBlockKey;
 
         public MainWindow()
         {
             InitializeComponent();
+            LoadKeyBindings();
             imageControls = SetupGameCanvas(gameState.GameGrid);
             LoadMainMenu();
+        }
+
+        private void LoadKeyBindings()
+        {
+            MoveLeftKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.MoveLeftKey, true);
+            MoveRightKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.MoveRightKey, true);
+            MoveDownKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.MoveDownKey, true);
+            RotateCWKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.RotateCWKey, true);
+            RotateCCWKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.RotateCCWKey, true);
+            DropBlockKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.DropBlockKey, true);
+
+            SetComboBoxForKey(MoveLeftComboBox, MoveLeftKey);
+            SetComboBoxForKey(MoveRightComboBox, MoveRightKey);
+            SetComboBoxForKey(MoveDownComboBox, MoveDownKey);
+            SetComboBoxForKey(RotateCWComboBox, RotateCWKey);
+            SetComboBoxForKey(RotateCCWComboBox, RotateCCWKey);
+            SetComboBoxForKey(DropBlockComboBox, DropBlockKey);
+        }
+
+        private void SetComboBoxForKey(ComboBox comboBox, Key key)
+        {
+            foreach (ComboBoxItem item in comboBox.Items)
+            {
+                if (item.Content.ToString() == key.ToString())
+                {
+                    comboBox.SelectedItem = item;
+                    break;
+                }
+            }
         }
 
         private void LoadMainMenu()
@@ -278,19 +308,7 @@ namespace Tetris
 
         private Key ParseKeyFromComboBox(ComboBoxItem comboBoxItem)
         {
-            if (comboBoxItem != null)
-            {
-                string keyString = comboBoxItem.Content.ToString();
-                if (Enum.TryParse(keyString, out Key key))
-                {
-                    return key;
-                }
-                else
-                {
-                    throw new ArgumentException($"Invalid key string: {keyString}");
-                }
-            }
-            throw new ArgumentNullException(nameof(comboBoxItem), "ComboBoxItem cannot be null.");
+            return (Key)Enum.Parse(typeof(Key), comboBoxItem.Content.ToString(), true);
         }
 
         private void BackToMainMenuButton_Click(object sender, RoutedEventArgs e)
