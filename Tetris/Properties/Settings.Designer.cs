@@ -34,5 +34,77 @@ namespace Tetris.Properties {
                 this["Record"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MoveLeftKey {
+            get {
+                return ((string)(this["MoveLeftKey"]));
+            }
+            set {
+                this["MoveLeftKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MoveRightKey {
+            get {
+                return ((string)(this["MoveRightKey"]));
+            }
+            set {
+                this["MoveRightKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MoveDownKey {
+            get {
+                return ((string)(this["MoveDownKey"]));
+            }
+            set {
+                this["MoveDownKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RotateCWKey {
+            get {
+                return ((string)(this["RotateCWKey"]));
+            }
+            set {
+                this["RotateCWKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RotateCCWKey {
+            get {
+                return ((string)(this["RotateCCWKey"]));
+            }
+            set {
+                this["RotateCCWKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DropBlockKey {
+            get {
+                return ((string)(this["DropBlockKey"]));
+            }
+            set {
+                this["DropBlockKey"] = value;
+            }
+        }
     }
 }

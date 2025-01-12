@@ -11,16 +11,65 @@
         FontFamily="pack://application:,,,/Assets/#Minecraft Regular" FontSize="28"
         KeyDown="Window_KeyDown">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/Background.png"/>
+        </Grid.Background>
         <Grid x:Name="MainMenu" Visibility="Visible">
-            <Grid.Background>
-                <ImageBrush ImageSource="Assets/Background.png"/>
-            </Grid.Background>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid Background="#CC000000">
+                    <TextBlock x:Name="CurrentRecord"
+                               Text="Record: 0"
+                               Margin="0,10"
+                               TextAlignment="Center"/>
+                </Grid>
                 <Button Name="PlayButton" Content="Play" Width="200" Height="50" FontSize="24" Click="PlayButton_Click"/>
-                <Button Name="HighestScoreButton" Content="Highest Score" Width="200" Height="50" FontSize="24" Click="HighestScoreButton_Click"/>
                 <Button Name="OptionsButton" Content="Options" Width="200" Height="50" FontSize="24" Click="OptionsButton_Click"/>
                 <Button Name="ExitButton" Content="Exit" Width="200" Height="50" FontSize="24" Click="ExitButton_Click"/>
             </StackPanel>
+        </Grid>
+        <Grid x:Name="OptionsMenu" Background="#CC000000" Visibility="Hidden">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Customize Controls" FontSize="18"/>
+
+            <TextBlock Text="Move Left"/>
+            <ComboBox x:Name="MoveLeftComboBox">
+                <ComboBoxItem Content="Left"/>
+                <ComboBoxItem Content="A"/>
+                <ComboBoxItem Content="Q"/>
+            </ComboBox>
+
+            <TextBlock Text="Move Right"/>
+            <ComboBox x:Name="MoveRightComboBox">
+                <ComboBoxItem Content="Right"/>
+                <ComboBoxItem Content="D"/>
+            </ComboBox>
+
+            <TextBlock Text="Move Down"/>
+            <ComboBox x:Name="MoveDownComboBox">
+                <ComboBoxItem Content="Down"/>
+                <ComboBoxItem Content="S"/>
+            </ComboBox>
+
+            <TextBlock Text="Rotate CW"/>
+            <ComboBox x:Name="RotateCWComboBox">
+                <ComboBoxItem Content="Up"/>
+                <ComboBoxItem Content="W"/>
+            </ComboBox>
+
+            <TextBlock Text="Rotate CCW"/>
+            <ComboBox x:Name="RotateCCWComboBox">
+                <ComboBoxItem Content="Z"/>
+            </ComboBox>
+
+            <TextBlock Text="Drop Block"/>
+            <ComboBox x:Name="DropBlockComboBox">
+                <ComboBoxItem Content="Space"/>
+                <ComboBoxItem Content="Enter"/>
+            </ComboBox>
+
+            <Button x:Name="SaveButton" Content="Save" Click="SaveOptionsButton_Click"/>
+            <Button Content="Back to Main Menu" Click="BackToMainMenuButton_Click"/>
+        </StackPanel>
         </Grid>
         <Grid x:Name="GameScreen" Visibility="Hidden">
             <Grid.RowDefinitions>
@@ -32,9 +81,6 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid.Background>
-                <ImageBrush ImageSource="Assets/Background.png"/>
-            </Grid.Background>
             <Viewbox Grid.Row="1"
                      Grid.Column="1"
                      Margin="0,0,0,20">
@@ -97,6 +143,10 @@
                             Margin="0,20,0,0"
                             Padding="5"
                             Click="PlayAgain_Click"/>
+                    <Button Content="Main menu"
+                            Margin="0,20,0,0"
+                            Padding="5"
+                            Click="MainMenu_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,10 +57,36 @@ namespace Tetris
             }
         }
 
+        private Key MoveLeftKey { get; set; } = Key.Left;
+        private Key MoveRightKey { get; set; } = Key.Right;
+        private Key MoveDownKey { get; set; } = Key.Down;
+        private Key RotateCWKey { get; set; } = Key.Up;
+        private Key RotateCCWKey { get; set; } = Key.Z;
+        private Key DropBlockKey { get; set; } = Key.Space;
+
         public MainWindow()
         {
             InitializeComponent();
             imageControls = SetupGameCanvas(gameState.GameGrid);
+            LoadMainMenu();
+        }
+
+        private void LoadMainMenu()
+        {
+            MainMenu.Visibility = Visibility.Visible;
+            GameScreen.Visibility = Visibility.Hidden;
+            GameOverMenu.Visibility = Visibility.Hidden;
+            OptionsMenu.Visibility = Visibility.Hidden;
+            CurrentRecord.Text = $"Record: {HighestScore}";
+        }
+
+        private async void StartGame()
+        {
+            MainMenu.Visibility = Visibility.Hidden;
+            GameScreen.Visibility = Visibility.Visible;
+            GameOverMenu.Visibility = Visibility.Hidden;
+            gameState = new GameState();
+            await GameLoop();
         }
 
         private Image[,] SetupGameCanvas(GameGrid grid)
@@ -144,15 +171,6 @@ namespace Tetris
             RecordText.Text = $"{HighestScore}";
         }
 
-        private void UpdateRecord(int newRecord)
-        {
-            if (newRecord > Properties.Settings.Default.Record)
-            {
-                Properties.Settings.Default.Record = newRecord;
-                Properties.Settings.Default.Save();
-            }
-        }
-
         private async Task GameLoop()
         {
             Draw(gameState);
@@ -168,9 +186,8 @@ namespace Tetris
             FinalScoreText.Text = $"Score: {gameState.Score}";
         }
 
-        private async void GameCanvas_Loaded(object sender, RoutedEventArgs e)
+        private void GameCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            await GameLoop();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -181,17 +198,17 @@ namespace Tetris
             }
             switch (e.Key)
             {
-                case Key.Left:
+                case var key when key == MoveLeftKey:
                     gameState.MoveBlockLeft(); break;
-                case Key.Right:
+                case var key when key == MoveRightKey:
                     gameState.MoveBlockRight(); break;
-                case Key.Down:
+                case var key when key == MoveDownKey:
                     gameState.MoveBlockDown(); break;
-                case Key.Up:
+                case var key when key == RotateCWKey:
                     gameState.RotateBlockCW(); break;
-                case Key.Z:
+                case var key when key == RotateCCWKey:
                     gameState.RotateBlockCCW(); break;
-                case Key.Space:
+                case var key when key == DropBlockKey:
                     gameState.DropBlock(); break;
                 default:
                     return;
@@ -199,11 +216,86 @@ namespace Tetris
             Draw(gameState);
         }
 
-        private async void PlayAgain_Click(object sender, RoutedEventArgs e)
+        private void MainMenu_Click(object sender, RoutedEventArgs e)
         {
-            gameState = new GameState();
+            LoadMainMenu();
+        }
+
+        private void PlayAgain_Click(object sender, RoutedEventArgs e)
+        {
+            StartGame();
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartGame();
+        }
+
+        private void OptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadOptionsMenu();
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void LoadOptionsMenu()
+        {
+            MainMenu.Visibility = Visibility.Hidden;
+            GameScreen.Visibility = Visibility.Hidden;
             GameOverMenu.Visibility = Visibility.Hidden;
-            await GameLoop();
+            OptionsMenu.Visibility = Visibility.Visible;
+            SaveButton.Content = "Save";
+
+            MoveLeftComboBox.SelectedItem = MoveLeftComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (item.Content.ToString() == MoveLeftKey.ToString()));
+            MoveRightComboBox.SelectedItem = MoveRightComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (item.Content.ToString() == MoveRightKey.ToString()));
+            MoveDownComboBox.SelectedItem = MoveDownComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (item.Content.ToString() == MoveDownKey.ToString()));
+            RotateCWComboBox.SelectedItem = RotateCWComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (item.Content.ToString() == RotateCWKey.ToString()));
+            RotateCCWComboBox.SelectedItem = RotateCCWComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (item.Content.ToString() == RotateCCWKey.ToString()));
+            DropBlockComboBox.SelectedItem = DropBlockComboBox.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (item.Content.ToString() == DropBlockKey.ToString()));
+        }
+
+        private void SaveOptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveLeftKey = ParseKeyFromComboBox(MoveLeftComboBox.SelectedItem as ComboBoxItem);
+            MoveRightKey = ParseKeyFromComboBox(MoveRightComboBox.SelectedItem as ComboBoxItem);
+            MoveDownKey = ParseKeyFromComboBox(MoveDownComboBox.SelectedItem as ComboBoxItem);
+            RotateCWKey = ParseKeyFromComboBox(RotateCWComboBox.SelectedItem as ComboBoxItem);
+            RotateCCWKey = ParseKeyFromComboBox(RotateCCWComboBox.SelectedItem as ComboBoxItem);
+            DropBlockKey = ParseKeyFromComboBox(DropBlockComboBox.SelectedItem as ComboBoxItem);
+
+            Properties.Settings.Default.MoveLeftKey = MoveLeftKey.ToString();
+            Properties.Settings.Default.MoveRightKey = MoveRightKey.ToString();
+            Properties.Settings.Default.MoveDownKey = MoveDownKey.ToString();
+            Properties.Settings.Default.RotateCWKey = RotateCWKey.ToString();
+            Properties.Settings.Default.RotateCCWKey = RotateCCWKey.ToString();
+            Properties.Settings.Default.DropBlockKey = DropBlockKey.ToString();
+            Properties.Settings.Default.Save();
+            SaveButton.Content = "Saved !";
+        }
+
+        private Key ParseKeyFromComboBox(ComboBoxItem comboBoxItem)
+        {
+            if (comboBoxItem != null)
+            {
+                string keyString = comboBoxItem.Content.ToString();
+                if (Enum.TryParse(keyString, out Key key))
+                {
+                    return key;
+                }
+                else
+                {
+                    throw new ArgumentException($"Invalid key string: {keyString}");
+                }
+            }
+            throw new ArgumentNullException(nameof(comboBoxItem), "ComboBoxItem cannot be null.");
+        }
+
+        private void BackToMainMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadMainMenu();
         }
     }
 }
