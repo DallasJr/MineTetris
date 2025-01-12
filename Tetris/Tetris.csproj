@@ -6,36 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\Background.png" />
-    <None Remove="Assets\Block-Empty.png" />
-    <None Remove="Assets\Block-I.png" />
-    <None Remove="Assets\Block-J.png" />
-    <None Remove="Assets\Block-L.png" />
-    <None Remove="Assets\Block-O.png" />
-    <None Remove="Assets\Block-S.png" />
-    <None Remove="Assets\Block-T.png" />
-    <None Remove="Assets\Block-Z.png" />
-    <None Remove="Assets\Icon.ico" />
-    <None Remove="Assets\MinecraftRegular.otf" />
-    <None Remove="Assets\TileBlue.png" />
-    <None Remove="Assets\TileCopper.png" />
-    <None Remove="Assets\TileCyan.png" />
-    <None Remove="Assets\TileDiamond.png" />
-    <None Remove="Assets\TileEmerald.png" />
-    <None Remove="Assets\TileEmpty.png" />
-    <None Remove="Assets\TileGold.png" />
-    <None Remove="Assets\TileGreen.png" />
-    <None Remove="Assets\TileIron.png" />
-    <None Remove="Assets\TileLapis.png" />
-    <None Remove="Assets\TileOrange.png" />
-    <None Remove="Assets\TilePurple.png" />
-    <None Remove="Assets\TileRed.png" />
-    <None Remove="Assets\TileRedstone.png" />
-    <None Remove="Assets\TileYellow.png" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
 
   <ItemGroup>
     <Content Include="Assets\Icon.ico" />

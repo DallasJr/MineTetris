@@ -74,12 +74,12 @@ namespace Tetris
 
         private void LoadKeyBindings()
         {
-            MoveLeftKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.MoveLeftKey, true);
-            MoveRightKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.MoveRightKey, true);
-            MoveDownKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.MoveDownKey, true);
-            RotateCWKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.RotateCWKey, true);
-            RotateCCWKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.RotateCCWKey, true);
-            DropBlockKey = (Key)Enum.Parse(typeof(Key), Properties.Settings.Default.DropBlockKey, true);
+            MoveLeftKey = GetKeyFromSettings("MoveLeftKey", Key.Left);
+            MoveRightKey = GetKeyFromSettings("MoveRightKey", Key.Right);
+            MoveDownKey = GetKeyFromSettings("MoveDownKey", Key.Down);
+            RotateCWKey = GetKeyFromSettings("RotateCWKey", Key.Up);
+            RotateCCWKey = GetKeyFromSettings("RotateCCWKey", Key.Z);
+            DropBlockKey = GetKeyFromSettings("DropBlockKey", Key.Space);
 
             SetComboBoxForKey(MoveLeftComboBox, MoveLeftKey);
             SetComboBoxForKey(MoveRightComboBox, MoveRightKey);
@@ -87,6 +87,19 @@ namespace Tetris
             SetComboBoxForKey(RotateCWComboBox, RotateCWKey);
             SetComboBoxForKey(RotateCCWComboBox, RotateCCWKey);
             SetComboBoxForKey(DropBlockComboBox, DropBlockKey);
+        }
+
+        private Key GetKeyFromSettings(string settingName, Key defaultKey)
+        {
+            string keyString = Properties.Settings.Default[settingName]?.ToString();
+            if (Enum.TryParse(typeof(Key), keyString, out var result))
+            {
+                return (Key)result;
+            }
+            else
+            {
+                return defaultKey;
+            }
         }
 
         private void SetComboBoxForKey(ComboBox comboBox, Key key)
